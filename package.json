@@ -9,11 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.4",
+    "@react-three/fiber": "^9.3.0",
+    "@react-three/rapier": "^2.1.0",
     "lucide-react": "^0.453.0",
+    "meshline": "^3.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "rough-notation": "^0.5.1",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.1.19",
+    "three": "^0.179.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.4.1",

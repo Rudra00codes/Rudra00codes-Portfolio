@@ -27,6 +27,47 @@ body { font-family: 'Space Grotesk', system-ui, Arial, sans-serif; }
 	@media (min-width: 1600px) { :root { font-size: 92%; } }
 }
 
+/* Timing function variables: use a robust cubic-bezier fallback and prefer the newer linear(...) curve when supported */
+:root {
+	--expo-in-fallback: cubic-bezier(0.16, 1, 0.3, 1);
+	--expo-out-fallback: cubic-bezier(0.7, 0, 0.84, 0);
+	--expo-in: var(--expo-in-fallback);
+	--expo-out: var(--expo-out-fallback);
+}
+
+@supports (animation-timing-function: linear(0 0%, 0.0085 31.26%, 1 100%)) {
+	:root {
+		--expo-in: linear(
+			0 0%, 0.0085 31.26%, 0.0167 40.94%,
+			0.0289 48.86%, 0.0471 55.92%,
+			0.0717 61.99%, 0.1038 67.32%,
+			0.1443 72.07%, 0.1989 76.7%,
+			0.2659 80.89%, 0.3465 84.71%,
+			0.4419 88.22%, 0.554 91.48%,
+			0.6835 94.51%, 0.8316 97.34%, 1 100%
+		);
+		--expo-out: linear(
+			0 0%, 0.1684 2.66%, 0.3165 5.49%,
+			0.446 8.52%, 0.5581 11.78%,
+			0.6535 15.29%, 0.7341 19.11%,
+			0.8011 23.3%, 0.8557 27.93%,
+			0.8962 32.68%, 0.9283 38.01%,
+			0.9529 44.08%, 0.9711 51.14%,
+			0.9833 59.06%, 0.9915 68.74%, 1 100%
+		);
+	}
+}
+
+/* Respect reduced-motion users */
+@media (prefers-reduced-motion: reduce) {
+	:root { --expo-in: var(--expo-in-fallback); --expo-out: var(--expo-out-fallback); }
+}
+
+/* Example usage for View Transitions and animations */
+::view-transition-group(root) {
+	animation-timing-function: var(--expo-in);
+}
+
 /* Hide scrollbars for horizontal rails (WebKit + Firefox) */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -43,3 +84,211 @@ body { font-family: 'Space Grotesk', system-ui, Arial, sans-serif; }
 		opacity: 0;
 	}
 }
+
+.panel {
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.04);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  position: relative;
+  overflow: hidden;
+}
+
+/* double ring */
+.panel.panel-double::before,
+.panel.panel-double::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* outer faint halo */
+.panel.panel-double::before {
+	/* stronger outer halo: use theme-driven outer ring color */
+	box-shadow: 0 0 0 8px var(--panel-ring-outer, rgba(0,0,0,0.06)), 0 8px 30px rgba(0,0,0,0.12);
+	opacity: 1;
+}
+
+/* inner thin ring */
+.panel.panel-double::after {
+	/* crisper inner ring: theme-aware inner border so it appears on light backgrounds */
+	inset: 1.8px;
+	border: 1.2px solid var(--panel-inner-border, rgba(0,0,0,0.06));
+	box-shadow: inset 0 1px 0 var(--panel-inset, rgba(0,0,0,0.03));
+	mix-blend-mode: overlay;
+}
+
+/* Panel-base (used by components) — liquid glass look for light theme, variable-driven */
+:root {
+	/* Light theme defaults for panels */
+	--panel-bg: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.92));
+	--panel-border: rgba(0,0,0,0.06);
+	--panel-inner-border: rgba(0,0,0,0.06);
+	--panel-inset: rgba(0,0,0,0.03);
+	--panel-shadow: 0 12px 34px rgba(17,24,39,0.06);
+	--panel-ring-outer: rgba(0,0,0,0.06);
+}
+
+.dark {
+	/* Dark theme fallbacks (preserve existing dark aesthetic) */
+	--panel-bg: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+	--panel-border: rgba(255,255,255,0.06);
+	--panel-inner-border: rgba(255,255,255,0.06);
+	--panel-inset: rgba(255,255,255,0.02);
+	--panel-shadow: 0 8px 22px rgba(0,0,0,0.6);
+	--panel-ring-outer: rgba(255,255,255,0.035);
+}
+
+/* Override Tailwind bg classes on panel-base with a glass style that adapts to .dark */
+.panel-base {
+	background: var(--panel-bg) !important;
+	border-color: var(--panel-border) !important;
+	box-shadow: var(--panel-shadow), inset 0 1px 0 var(--panel-inset) !important;
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+	position: relative;
+}
+
+/* Double-ring support for panel-base to match earlier panel-double visual */
+.panel-base.panel-double::before,
+.panel-base.panel-double::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+}
+.panel-base.panel-double::before {
+	box-shadow: 0 0 0 8px var(--panel-ring-outer), 0 8px 30px rgba(0,0,0,0.12);
+	opacity: 1;
+}
+.panel-base.panel-double::after {
+	inset: 1.8px;
+	border: 1.2px solid rgba(255,255,255,0.06);
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+	mix-blend-mode: overlay;
+}
+
+/* Theme GIF overlay helpers: prefer classes so JS only toggles classes, not inline colors */
+.theme-overlay {
+	/* centered, contained vignette so GIF reads as a silhouette */
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: min(48vmin, 720px);
+	height: auto;
+	object-fit: contain;
+	z-index: 9999;
+	pointer-events: none;
+	opacity: 1;
+	transition: opacity 320ms var(--expo-out), filter 220ms ease;
+}
+
+.theme-overlay--dark {
+	/* white silhouette for dark backgrounds */
+	filter: grayscale(1) saturate(0) contrast(220%) brightness(220%);
+	/* invert at the end to push subject to white if needed */
+	/* combine with screen blend to sit above dark UI */
+	mix-blend-mode: screen;
+	background-color: transparent;
+	box-shadow: 0 10px 30px rgba(255,255,255,0.06);
+}
+
+.theme-overlay--light {
+	/* dark silhouette for light backgrounds */
+	filter: grayscale(1) saturate(0) contrast(220%) brightness(12%);
+	mix-blend-mode: multiply;
+	background-color: transparent;
+	box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.theme-overlay[data-frozen="1"] {
+	/* frozen snapshot: tighten contrast to read as a crisp silhouette */
+	filter: contrast(260%) saturate(0%) brightness(100%);
+}
+
+/* When preparing to freeze, slightly blur and scale down the GIF for a smoother stop */
+.theme-overlay--freeze {
+	filter: blur(4px) contrast(180%) saturate(0%) brightness(100%);
+	transform: translate(-50%, -50%) scale(0.98);
+	transition: filter 160ms ease, transform 160ms ease;
+}
+
+/* Frozen state: crisp silhouette, slightly reduced size to feel 'settled' */
+.theme-overlay--frozen {
+	filter: contrast(260%) saturate(0%) brightness(100%);
+	transform: translate(-50%, -50%) scale(0.985);
+	transition: opacity 320ms var(--expo-out), filter 220ms ease, transform 220ms ease;
+}
+
+/* Full-screen subtle backdrop that blurs the UI during the GIF flip for smooth transition */
+.theme-backdrop {
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	z-index: 9998;
+	backdrop-filter: blur(8px) saturate(0.85);
+	-webkit-backdrop-filter: blur(8px) saturate(0.85);
+	background: rgba(0,0,0,0.02);
+	opacity: 0;
+	transition: opacity 280ms var(--expo-out), backdrop-filter 220ms ease;
+}
+
+/* Ripple effect used by project cards: subtle expanding rings */
+@keyframes ripple-expand {
+	0% {
+		transform: scale(0.6);
+		opacity: 0.45;
+	}
+	80% {
+		opacity: 0.06;
+	}
+	100% {
+		transform: scale(1.7);
+		opacity: 0;
+	}
+}
+
+.project-ripple {
+	position: absolute;
+	left: 50%;
+	top: 6%;
+	transform: translateX(-50%);
+	width: 68%;
+	height: 68%;
+	pointer-events: none;
+	border-radius: 9999px;
+	z-index: 0; /* sit behind content */
+	display: block;
+}
+.project-ripple .ring {
+	position: absolute;
+	inset: 0;
+	border-radius: 9999px;
+	border: 1px solid rgba(255,255,255,0.12);
+	box-shadow: 0 8px 30px rgba(255,255,255,0.03) inset;
+	mix-blend-mode: screen;
+	opacity: 0;
+	transform-origin: center center;
+	animation-name: ripple-expand;
+	animation-duration: 2600ms;
+	animation-iteration-count: infinite;
+	animation-timing-function: cubic-bezier(0.22,0.9,0.35,1);
+}
+.project-ripple .ring:nth-child(2) { animation-delay: 600ms; }
+.project-ripple .ring:nth-child(3) { animation-delay: 1200ms; }
+.project-ripple .ring:nth-child(4) { animation-delay: 1800ms; }
+
+
+
+/* SVG color helpers: use currentColor for icons so they respect text color classes */
+.svg-current-color { color: inherit; }
+.svg-current-color svg { display: block; fill: currentColor; }
+
+/* Utility: simplify overlay removal fade-out */
+.theme-overlay--fading { opacity: 0 !important; }
+

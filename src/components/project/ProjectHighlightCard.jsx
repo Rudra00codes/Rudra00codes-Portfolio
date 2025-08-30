@@ -1,5 +1,6 @@
 import React from 'react';
 import Panel from '../layout/Panel.jsx';
+import Ripple from '../ui/ripple';
 
 const GearIcon = ({ className = '' }) => (
   <svg
@@ -16,35 +17,25 @@ const GearIcon = ({ className = '' }) => (
 const ProjectHighlightCard = () => (
   <Panel className="panel-double relative overflow-hidden text-black font-extrabold h-56 sm:h-72 w-full max-w-sm p-4 sm:p-6">
     {/* Purple gradient background */}
-    <div className="absolute inset-0 -z-10" style={{
+    <div className="absolute inset-0 -z-30" style={{
       background: 'linear-gradient(135deg,#e9d5ff 0%,#d8b4ff 35%,#c084fc 100%)'
     }} />
 
-    {/* Center vignette circle */}
-    <div className="absolute left-1/2 top-6 -translate-x-1/2 rounded-full pointer-events-none"
-      style={{ width: '68%', height: '68%', background: 'rgba(255,255,255,0.18)' }} />
-
-    {/* Ripple rings container */}
-    <div className="project-ripple" aria-hidden>
-   <span className="ring" />
-   <span className="ring" />
-   <span className="ring" />
-   <span className="ring" />
+    {/* Ripple background (uses the ripple component) */}
+    <div className="absolute inset-0 -z-20 flex items-center justify-center pointer-events-none" aria-hidden>
+      <Ripple />
     </div>
 
-    {/* Soft concentric rings (static) */}
-    <div className="absolute left-1/2 top-6 -translate-x-1/2 rounded-full pointer-events-none"
-      style={{ width: '82%', height: '82%', borderRadius: '9999px', boxShadow: 'inset 0 0 0 28px rgba(255,255,255,0.04)' }} />
+  {/* Ripple background (uses the ripple component) */}
+  {/* Static vignette/circle elements removed — Ripple component provides animated rings */}
 
-      {/* Gear icon top-left */}
-      <div className="absolute left-4 top-4 text-black/90 drop-shadow-sm">
+    {/* Top-left: gear + title inline */}
+    <div className="absolute left-4 top-4 z-10 flex items-center gap-4">
+      <div className="text-black/90 drop-shadow-sm">
         <GearIcon className="w-10 h-10" />
       </div>
-
-      {/* Title */}
-      <div className="relative z-10 mt-10">
-        <div className="text-4xl sm:text-5xl leading-none tracking-tight drop-shadow-md">PROJECTS</div>
-      </div>
+      <div className="text-4xl sm:text-5xl leading-none tracking-tight drop-shadow-md">PROJECTS</div>
+    </div>
 
       {/* Vertical/right Japanese text */}
     <div className="absolute right-4 bottom-4 z-10 font-black tracking-wider text-lg"

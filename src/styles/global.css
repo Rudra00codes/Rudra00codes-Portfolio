@@ -238,50 +238,6 @@ body { font-family: 'Space Grotesk', system-ui, Arial, sans-serif; }
 	transition: opacity 280ms var(--expo-out), backdrop-filter 220ms ease;
 }
 
-/* Ripple effect used by project cards: subtle expanding rings */
-@keyframes ripple-expand {
-	0% {
-		transform: scale(0.6);
-		opacity: 0.45;
-	}
-	80% {
-		opacity: 0.06;
-	}
-	100% {
-		transform: scale(1.7);
-		opacity: 0;
-	}
-}
-
-.project-ripple {
-	position: absolute;
-	left: 50%;
-	top: 6%;
-	transform: translateX(-50%);
-	width: 68%;
-	height: 68%;
-	pointer-events: none;
-	border-radius: 9999px;
-	z-index: 0; /* sit behind content */
-	display: block;
-}
-.project-ripple .ring {
-	position: absolute;
-	inset: 0;
-	border-radius: 9999px;
-	border: 1px solid rgba(255,255,255,0.12);
-	box-shadow: 0 8px 30px rgba(255,255,255,0.03) inset;
-	mix-blend-mode: screen;
-	opacity: 0;
-	transform-origin: center center;
-	animation-name: ripple-expand;
-	animation-duration: 2600ms;
-	animation-iteration-count: infinite;
-	animation-timing-function: cubic-bezier(0.22,0.9,0.35,1);
-}
-.project-ripple .ring:nth-child(2) { animation-delay: 600ms; }
-.project-ripple .ring:nth-child(3) { animation-delay: 1200ms; }
-.project-ripple .ring:nth-child(4) { animation-delay: 1800ms; }
 
 
 

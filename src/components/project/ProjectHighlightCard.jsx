@@ -1,14 +1,56 @@
 import React from 'react';
 import Panel from '../layout/Panel.jsx';
 
+const GearIcon = ({ className = '' }) => (
+  <svg
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path fill="currentColor" d="M19.14,12.94a7.14,7.14,0,0,0,0-1.88l2.03-1.58a0.5,0.5,0,0,0,.12-0.64l-1.92-3.32a0.5,0.5,0,0,0-.6-0.22l-2.39,0.96a7.11,7.11,0,0,0-1.62-0.94L14.6,2.7a0.5,0.5,0,0,0-.49-0.37H10a0.5,0.5,0,0,0-.49.37L8.86,5.33A7.11,7.11,0,0,0,7.24,6.27L4.85,5.31a0.5,0.5,0,0,0-.6.22L2.33,8.85a0.5,0.5,0,0,0,.12.64L4.48,11.07a7.14,7.14,0,0,0,0,1.88L2.45,14.53a0.5,0.5,0,0,0-.12.64l1.92,3.32a0.5,0.5,0,0,0,.6.22l2.39-0.96a7.11,7.11,0,0,0,1.62.94l0.65,2.66a0.5,0.5,0,0,0,.49.37h4.12a0.5,0.5,0,0,0,.49-0.37l0.65-2.66a7.11,7.11,0,0,0,1.62-0.94l2.39,0.96a0.5,0.5,0,0,0,.6-0.22l1.92-3.32a0.5,0.5,0,0,0-.12-0.64ZM12,15.5A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+  </svg>
+);
+
 const ProjectHighlightCard = () => (
-  <Panel className="panel-double relative overflow-hidden bg-purple-300 text-black font-extrabold h-56 sm:h-72 flex flex-col justify-start p-4 sm:p-6">
-    <div className="absolute -top-10 -left-10 w-80 h-80 rounded-full bg-white/20" />
-    <div className="absolute -bottom-10 -right-10 w-96 h-96 rounded-full bg-white/10" />
-    <div className="relative z-10 space-y-2">
-      <div className="text-4xl sm:text-5xl leading-none">PROJECT<br/>SSS</div>
+  <Panel className="panel-double relative overflow-hidden text-black font-extrabold h-56 sm:h-72 w-full max-w-sm p-4 sm:p-6">
+    {/* Purple gradient background */}
+    <div className="absolute inset-0 -z-10" style={{
+      background: 'linear-gradient(135deg,#e9d5ff 0%,#d8b4ff 35%,#c084fc 100%)'
+    }} />
+
+    {/* Center vignette circle */}
+    <div className="absolute left-1/2 top-6 -translate-x-1/2 rounded-full pointer-events-none"
+      style={{ width: '68%', height: '68%', background: 'rgba(255,255,255,0.18)' }} />
+
+    {/* Ripple rings container */}
+    <div className="project-ripple" aria-hidden>
+   <span className="ring" />
+   <span className="ring" />
+   <span className="ring" />
+   <span className="ring" />
     </div>
-    <div className="absolute right-4 bottom-4 rotate-90 font-black tracking-wider">工芸</div>
+
+    {/* Soft concentric rings (static) */}
+    <div className="absolute left-1/2 top-6 -translate-x-1/2 rounded-full pointer-events-none"
+      style={{ width: '82%', height: '82%', borderRadius: '9999px', boxShadow: 'inset 0 0 0 28px rgba(255,255,255,0.04)' }} />
+
+      {/* Gear icon top-left */}
+      <div className="absolute left-4 top-4 text-black/90 drop-shadow-sm">
+        <GearIcon className="w-10 h-10" />
+      </div>
+
+      {/* Title */}
+      <div className="relative z-10 mt-10">
+        <div className="text-4xl sm:text-5xl leading-none tracking-tight drop-shadow-md">PROJECTS</div>
+      </div>
+
+      {/* Vertical/right Japanese text */}
+    <div className="absolute right-4 bottom-4 z-10 font-black tracking-wider text-lg"
+         style={{ writingMode: 'vertical-rl', textOrientation: 'mixed', transform: 'rotate(180deg)' }}>
+      工芸
+    </div>
   </Panel>
 );
 

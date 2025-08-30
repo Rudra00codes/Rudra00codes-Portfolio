@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useRef } from 'react';
 import Panel from '../layout/Panel.jsx';
 import avatar from '@/assets/images/picofme.png';
+import MorphingText from '@/components/ui/morphingtext';
+import Highlighter from '@/components/ui/highlighter';
 
 const SPIN_MS = 650; // keep spin and ink in sync
 
@@ -103,14 +105,24 @@ const ProfileCard = () => {
       </div>
 
       <p className="mt-5 sm:mt-6 font-semibold text-base sm:text-lg">
-        I build <span className="font-extrabold">Backends</span> .
+        I build{' '}
+        <span className="font-extrabold inline-block align-baseline">
+          <MorphingText inline texts={['sane WebApps', 'snappy frontends', 'useful features', 'happy users']} />
+        </span>{' '}
       </p>
-      <p className="mt-2 text-sm text-neutral-300">
-        Hello, I'm Shawn! a 22 year old developer based in Goa - India.
+      <p className="mt-2 text-sm text-neutral-300 leading-relaxed">
+        Hello, I'm{' '}
+        <Highlighter action="underline" color="#ffd1dc" padding={1} iterations={2} strokeWidth={2}>
+          Rudra 
+        </Highlighter>
+         ! a 20 year old{' '}
+        <Highlighter action="box" color="#ffe8a3" padding={2} iterations={1} strokeWidth={1.5}>
+           developer
+        </Highlighter>{' '} based in Punjab - India.
       </p>
 
       <div className="mt-5 sm:mt-6 flex items-center justify-between text-[11px] text-neutral-400">
-        <em>“How do i center<br/>a div again?”</em>
+        <p>“Still centering a div!”<br /> (┬┬﹏┬┬) </p>
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-green-500" />
           <span>Available for work</span>

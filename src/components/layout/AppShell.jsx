@@ -1,7 +1,7 @@
 import React from 'react';
 
 const AppShell = ({ children }) => (
-  <div className="relative min-h-screen w-full bg-white text-black dark:bg-black dark:text-white overflow-hidden">
+  <div className="relative min-h-screen w-full bg-transparent text-black dark:bg-black dark:text-white overflow-hidden">
     {/* Dotted radial grid background */}
     <div
       aria-hidden="true"

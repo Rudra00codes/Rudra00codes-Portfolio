@@ -9,9 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@react-three/drei": "^10.7.4",
-    "@react-three/fiber": "^9.3.0",
-    "@react-three/rapier": "^2.1.0",
+    "@react-three/drei": "^9.114.0",
+    "@react-three/fiber": "^8.17.6",
+    "@react-three/rapier": "^1.5.0",
     "lucide-react": "^0.453.0",
     "meshline": "^3.3.1",
     "react": "^18.3.1",

@@ -58,3 +58,10 @@ src/assets/images/Logo.png
 src/assets/images/favicon-32x32.png
 src/assets/fonts/Kusanagi.otf
 src/assets/fonts/SpaceArmour.otf
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

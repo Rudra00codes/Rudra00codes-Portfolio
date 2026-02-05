@@ -199,16 +199,10 @@ const ProfileCard = () => {
         />
       )}
 
-      {/* Header */}
-      <div className="flex items-start justify-between w-full">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-[2rem] overflow-hidden bg-white/10 shadow-inner">
-            <img src={avatar} alt="Profile picture" className="w-full h-full object-cover" />
-          </div>
-          <div>
-            <h2 className="font-bold text-xl sm:text-2xl text-white tracking-tight leading-tight">Rudra00codes</h2>
-            <p className="text-sm sm:text-base text-neutral-500 font-medium">@rudra00codes</p>
-          </div>
+      <div className="flex items-start gap-4">
+        {/* Squircle avatar */}
+        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[28%] overflow-hidden bg-white/10">
+          <img src={avatar} alt="Profile picture" className="w-full h-full object-cover" />
         </div>
 
         <div className="flex-1">

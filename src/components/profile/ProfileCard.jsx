@@ -211,7 +211,12 @@ const ProfileCard = () => {
           </div>
         </div>
 
-        {/* Yin Yang icon */}
+        <div className="flex-1">
+          <h2 className="font-semibold text-base sm:text-lg">Rudra Pratap Singh</h2>
+          <p className="text-xs sm:text-sm text-neutral-400">@rudra00codes</p>
+        </div>
+
+        {/* Yin Yang icon (click to spin + ink pull) */}
         <span
           ref={btnRef}
           role="button"

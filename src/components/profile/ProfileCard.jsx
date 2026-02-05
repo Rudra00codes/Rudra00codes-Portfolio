@@ -60,8 +60,8 @@ const ProfileCard = () => {
           try {
             const nextIsDark = !document.documentElement.classList.contains('dark');
             document.documentElement.classList.toggle('dark', nextIsDark);
-            try { localStorage.setItem('theme', nextIsDark ? 'dark' : 'light'); } catch (e) {}
-          } catch (e) {}
+            try { localStorage.setItem('theme', nextIsDark ? 'dark' : 'light'); } catch (e) { }
+          } catch (e) { }
           return;
         }
         // Create overlay element if missing
@@ -89,16 +89,16 @@ const ProfileCard = () => {
         const currentlyDark = document.documentElement.classList.contains('dark');
         if (currentlyDark) {
           // page is dark: show GIF as white-on-dark
-            overlay.classList.remove('theme-overlay--light');
-            overlay.classList.add('theme-overlay--dark');
+          overlay.classList.remove('theme-overlay--light');
+          overlay.classList.add('theme-overlay--dark');
         } else {
           // page is light: show GIF as dark-on-light
-            overlay.classList.remove('theme-overlay--dark');
-            overlay.classList.add('theme-overlay--light');
+          overlay.classList.remove('theme-overlay--dark');
+          overlay.classList.add('theme-overlay--light');
         }
 
         // fade control
-  overlay.classList.add('theme-overlay');
+        overlay.classList.add('theme-overlay');
         document.body.appendChild(overlay);
 
         // Flip theme near midpoint of GIF so the animation masks the change.
@@ -124,7 +124,7 @@ const ProfileCard = () => {
             overlay.classList.add('theme-overlay--freeze');
             // ensure the backdrop transition has a frame to start from
             requestAnimationFrame(() => {
-              try { backdrop.style.opacity = '1'; } catch (e) {}
+              try { backdrop.style.opacity = '1'; } catch (e) { }
             });
 
             // small delay so blur/backdrop ramps up and looks smooth
@@ -153,23 +153,23 @@ const ProfileCard = () => {
 
                 const nextIsDark = !document.documentElement.classList.contains('dark');
                 document.documentElement.classList.toggle('dark', nextIsDark);
-                try { localStorage.setItem('theme', nextIsDark ? 'dark' : 'light'); } catch (e) {}
+                try { localStorage.setItem('theme', nextIsDark ? 'dark' : 'light'); } catch (e) { }
 
                 // fade backdrop away after short delay
                 setTimeout(() => {
-                  try { backdrop.style.opacity = '0'; } catch (e) {}
-                  setTimeout(() => { try { backdrop.remove(); } catch (e) {} }, 360);
+                  try { backdrop.style.opacity = '0'; } catch (e) { }
+                  setTimeout(() => { try { backdrop.remove(); } catch (e) { } }, 360);
                 }, 360);
-              } catch (err) {}
+              } catch (err) { }
             }, 120);
-          } catch (e) {}
+          } catch (e) { }
         }, freezeTime);
 
         // Fade out then remove after GIF_DURATION_MS
         setTimeout(() => {
-          try { overlay.style.opacity = '0'; } catch (e) {}
+          try { overlay.style.opacity = '0'; } catch (e) { }
           setTimeout(() => {
-            try { overlay.remove(); overlayRef.current = null; } catch (e) {}
+            try { overlay.remove(); overlayRef.current = null; } catch (e) { }
           }, 360);
         }, GIF_DURATION_MS);
       };
@@ -182,7 +182,7 @@ const ProfileCard = () => {
   }, []);
 
   return (
-    <Panel className="panel-double p-4 sm:p-6 max-w-[720px] w-full mx-auto">
+    <Panel className="panel-double p-5 sm:p-7 flex flex-col justify-between h-full bg-black/60">
       {/* Ink overlay (fixed to viewport) */}
       {ink.active && (
         <div
@@ -199,18 +199,19 @@ const ProfileCard = () => {
         />
       )}
 
-      <div className="flex items-start gap-4">
-        {/* Squircle avatar */}
-        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[28%] overflow-hidden bg-white/10">
-          <img src={avatar} alt="Profile picture" className="w-full h-full object-cover" />
+      {/* Header */}
+      <div className="flex items-start justify-between w-full">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-[2rem] overflow-hidden bg-white/10 shadow-inner">
+            <img src={avatar} alt="Profile picture" className="w-full h-full object-cover" />
+          </div>
+          <div>
+            <h2 className="font-bold text-xl sm:text-2xl text-white tracking-tight leading-tight">Rudra00codes</h2>
+            <p className="text-sm sm:text-base text-neutral-500 font-medium">@rudra00codes</p>
+          </div>
         </div>
 
-        <div className="flex-1">
-          <h2 className="font-semibold text-base sm:text-lg">Rudra00codes</h2>
-          <p className="text-xs sm:text-sm text-neutral-400">@rudra00codes</p>
-        </div>
-
-        {/* Yin Yang icon (click to spin + ink pull) */}
+        {/* Yin Yang icon */}
         <span
           ref={btnRef}
           role="button"
@@ -219,14 +220,13 @@ const ProfileCard = () => {
           onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && triggerSpinAndInk()}
           onAnimationEnd={onSpinEnd}
           aria-label="Toggle theme"
-          className={`inline-flex items-center justify-center w-7 h-7 rounded-full bg-white/5 ring-1 ring-white/10 cursor-pointer select-none origin-center ${
-            spinning ? 'animate-[spin_650ms_ease-in-out]' : ''
-          }`}
+          className={`relative inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/5 ring-1 ring-white/10 hover:bg-white/10 cursor-pointer select-none transition-colors ${spinning ? 'animate-[spin_650ms_ease-in-out]' : ''
+            }`}
         >
           <svg
             viewBox="0 0 64 64"
             xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5"
+            className="w-5 h-5 opacity-80"
             aria-hidden="true"
             focusable="false"
           >
@@ -238,28 +238,28 @@ const ProfileCard = () => {
         </span>
       </div>
 
-      <p className="mt-5 sm:mt-6 font-semibold text-base sm:text-lg">
-        I build{' '}
-        <span className="font-extrabold inline-block align-baseline">
-          <MorphingText inline texts={['sane WebApps', 'snappy frontends', 'useful features', 'happy users']} />
-        </span>{' '}
-      </p>
-      <p className="mt-2 text-sm text-neutral-300 leading-relaxed">
-        Hello, I'm{' '}
-        <Highlighter action="underline" color="#ffd1dc" padding={1} iterations={2} strokeWidth={2}>
-          Rudra 
-        </Highlighter>
-         ! a 20 year old{' '}
-        <Highlighter action="box" color="#ffe8a3" padding={2} iterations={1} strokeWidth={1.5}>
-           developer
-        </Highlighter>{' '} based in Punjab - India.
-      </p>
+      {/* Bio / Content */}
+      <div className="mt-8 mb-6">
+        <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-3">
+          I build{' '}
+          <span className="inline-block text-neutral-400">
+            <MorphingText inline texts={['WebApps', 'Frontends', 'Experiences']} />
+          </span>
+        </p>
+        <p className="text-base sm:text-lg text-neutral-400 leading-relaxed max-w-lg">
+          Hello, I'm <span className="text-white font-semibold">Rudra</span>! A 20 year old developer based in Punjab - India.
+        </p>
+      </div>
 
-      <div className="mt-5 sm:mt-6 flex items-center justify-between text-[11px] text-neutral-400">
-        <p>“Still centering a div!”<br /> (┬┬﹏┬┬) </p>
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-green-500" />
-          <span>Available for work</span>
+      {/* Footer */}
+      <div className="flex items-end justify-between text-xs sm:text-sm text-neutral-500 font-medium pt-2">
+        <p className="leading-relaxed opacity-60">"Still centering a div!"<br /> (┬┬﹏┬┬) </p>
+        <div className="flex items-center gap-2.5 bg-white/5 px-3 py-1.5 rounded-full border border-white/5">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+          </span>
+          <span className="text-neutral-300">Available for work</span>
         </div>
       </div>
     </Panel>

@@ -2,8 +2,11 @@ import React from 'react';
 
 /* Panel now supports a 'double-ring' effect by leveraging a ::after inner outline.
    To enable, add the class 'panel-double'. */
-const Panel = ({ className = '', children, as: Tag = 'div' }) => (
-  <Tag className={`panel-base relative rounded-3xl border border-white/10 bg-black/40 backdrop-blur-md shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_4px_24px_-8px_rgba(0,0,0,0.8)] p-6 ${className}`}>
+const Panel = ({ className = '', children, as: Tag = 'div', ...props }) => (
+  <Tag 
+    className={`panel-base relative rounded-3xl border border-white/10 bg-black/40 backdrop-blur-md shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_4px_24px_-8px_rgba(0,0,0,0.8)] p-6 ${className}`}
+    {...props}
+  >
     {children}
   </Tag>
 );
@@ -20,7 +23,7 @@ if (typeof document !== 'undefined' && !document.getElementById('panel-double-st
       content: '';
       pointer-events: none;
       position: absolute; inset: 3px;
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid var(--panel-inner-border-double, rgba(255,255,255,0.08));
       border-radius: 1.3rem; /* match rounded-3xl minus offset */
     }
   `;

@@ -9,7 +9,7 @@ const AppShell = ({ children }) => (
       style={{
         // use transparent so the dotted background reads against the current page background
         background: 'transparent',
-        backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.15) 0.9px, transparent 0.9px)',
+        backgroundImage: 'var(--app-radial-dots)',
         backgroundSize: '25px 25px',
         backgroundPosition: '0 0'
       }}

@@ -9,9 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@react-three/drei": "^9.114.0",
-    "@react-three/fiber": "^8.17.6",
+    "@react-three/fiber": "^8.18.0",
     "@react-three/rapier": "^1.5.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.41.0",
     "gsap": "^3.13.0",
     "lucide-react": "^0.453.0",
     "meshline": "^3.3.1",
@@ -19,6 +24,7 @@
     "react-dom": "^18.3.1",
     "rough-notation": "^0.5.1",
     "styled-components": "^6.1.19",
+    "tailwind-merge": "^3.6.0",
     "three": "^0.179.1"
   },
   "devDependencies": {

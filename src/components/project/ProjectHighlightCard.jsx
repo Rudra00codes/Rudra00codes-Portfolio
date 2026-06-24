@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import Panel from '../layout/Panel.jsx';
 import Ripple from '../ui/ripple';
 
@@ -14,38 +15,40 @@ const GearIcon = ({ className = '' }) => (
   </svg>
 );
 
-const ProjectHighlightCard = () => (
+const ProjectHighlightCard = ({ onClick }) => (
   // Using 'rounded-3xl' to match the global panel style, but with overflow-hidden for the inner gradient
-  <Panel className="panel-double relative overflow-hidden text-black font-black h-64 sm:h-80 w-full max-w-sm p-6 sm:p-8 hover:scale-[1.02] transition-transform duration-500">
+  <Panel 
+    as={motion.div}
+    className="panel-double relative overflow-hidden text-black font-black h-64 sm:h-80 w-full max-w-sm p-5 sm:p-6 cursor-pointer flex flex-col justify-between items-start"
+    whileHover={{ scale: 1.02 }}
+    whileTap={{ scale: 0.98 }}
+    onClick={onClick}
+    layoutId="project-highlight-card"
+  >
     {/* Purple gradient background - lighter, more pastel to match reference */}
     <div className="absolute inset-0 -z-30" style={{
       background: 'linear-gradient(135deg, #E0C3FC 0%, #C084FC 50%, #A855F7 100%)'
     }} />
 
     {/* Ripple background (uses the ripple component) */}
-    <div className="absolute inset-0 -z-20 flex items-center justify-center opacity-40 pointer-events-none" aria-hidden>
+    <div className="absolute inset-0 -z-20 flex items-center justify-center opacity-30 pointer-events-none" aria-hidden>
       <Ripple />
     </div>
 
-    {/* Center Emoji/Icon - Reference has a cool face or gear */}
-    <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-      <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-lg border border-white/30">
-        <span className="text-4xl">😎</span>
+    {/* Upper Content: Gear and Stacked Title */}
+    <div className="relative z-20 flex flex-col items-start gap-2 pointer-events-none">
+      <div className="text-black/80 drop-shadow-sm animate-[spin_8s_linear_infinite]">
+        <GearIcon className="w-12 h-12 stroke-[2.5]" />
       </div>
+      <h2 className="text-4xl sm:text-[2.2rem] font-extrabold tracking-tighter leading-[0.95] text-black/90">
+        PROJECT<br />WORKS
+      </h2>
     </div>
 
-    {/* Top-left: Title - Big and bold */}
-    <div className="absolute left-2 top-6 z-20 flex items-center gap-3">
-      <div className="text-black/80 drop-shadow-sm animate-[spin_3s_linear_infinite]">
-        <GearIcon className="w-8 h-8" />
-      </div>
-      <div className="text-5xl sm:text-6xl tracking-tighter leading-none opacity-90 mix-blend-multiply">PROJECTS</div>
-    </div>
-
-    {/* Vertical/right Japanese text */}
-    <div className="absolute right-6 bottom-6 z-20 font-black tracking-widest text-xl opacity-60 mix-blend-overlay"
-      style={{ writingMode: 'vertical-rl', textOrientation: 'mixed', transform: 'rotate(180deg)' }}>
-      工芸
+    {/* Vertical/right Japanese text at the bottom right */}
+    <div className="absolute right-4 bottom-4 z-20 flex flex-col text-xl font-extrabold text-black/80 leading-tight pointer-events-none">
+      <p>工</p>
+      <p>芸</p>
     </div>
   </Panel>
 );

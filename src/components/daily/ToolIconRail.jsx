@@ -39,7 +39,7 @@ const ToolIconRail = ({ horizontal = false }) => {
     );
   }
   return (
-    <Panel className="panel-double flex flex-col items-center gap-4 py-6 w-32 bg-black/60">
+    <Panel className="panel-double flex flex-col items-center gap-4 py-6 w-32">
       {tools.map(t => (
         <div key={t.id} className="w-16 h-16 rounded-[1.2rem] bg-white flex items-center justify-center shadow-lg hover:scale-105 transition-transform duration-300">
           {t.icon}

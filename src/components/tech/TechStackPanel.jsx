@@ -8,17 +8,17 @@ const groups = [
 ];
 
 const Tag = ({ children }) => (
-  <span className="inline-flex items-center justify-center rounded-lg bg-white/5 border border-white/10 px-3 py-1.5 text-[13px] font-medium text-neutral-300 tracking-wide leading-none transition-colors hover:bg-white/10 hover:border-white/20 hover:text-white cursor-default">
+  <span className="inline-flex items-center justify-center rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 px-3 py-1.5 text-[13px] font-medium text-neutral-700 dark:text-neutral-300 tracking-wide leading-none transition-colors hover:bg-black/10 dark:hover:bg-white/10 hover:border-black/20 dark:hover:border-white/20 hover:text-black dark:hover:text-white cursor-default">
     {children}
   </span>
 );
 
 const TechStackPanel = () => {
   return (
-    <Panel className="panel-double p-5 flex flex-col h-full bg-black/60">
+    <Panel className="panel-double p-5 flex flex-col h-full">
       <header className="mb-8 relative z-10">
-        <div className="text-4xl sm:text-[3.5rem] font-black leading-none tracking-tighter text-white opacity-90">{`{ }`}</div>
-        <h2 className="mt-2 text-4xl sm:text-[3.5rem] font-black leading-[0.9] tracking-tighter text-white">TECH<br />STACK</h2>
+        <div className="text-4xl sm:text-[3.5rem] font-black leading-none tracking-tighter text-black dark:text-white opacity-90">{`{ }`}</div>
+        <h2 className="mt-2 text-4xl sm:text-[3.5rem] font-black leading-[0.9] tracking-tighter text-black dark:text-white">TECH<br />STACK</h2>
       </header>
       <div className="space-y-8 flex-1">
         {groups.map(g => (

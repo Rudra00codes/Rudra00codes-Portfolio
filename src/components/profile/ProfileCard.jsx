@@ -182,7 +182,7 @@ const ProfileCard = () => {
   }, []);
 
   return (
-    <Panel className="panel-double p-5 sm:p-7 flex flex-col justify-between h-full bg-black/60">
+    <Panel className="panel-double p-5 sm:p-7 flex flex-col justify-between h-full">
       {/* Ink overlay (fixed to viewport) */}
       {ink.active && (
         <div
@@ -201,13 +201,13 @@ const ProfileCard = () => {
 
       <div className="flex items-start gap-4">
         {/* Squircle avatar */}
-        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[28%] overflow-hidden bg-white/10">
+        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[28%] overflow-hidden bg-black/5 dark:bg-white/10">
           <img src={avatar} alt="Profile picture" className="w-full h-full object-cover" />
         </div>
 
         <div className="flex-1">
           <h2 className="font-semibold text-base sm:text-lg">Rudra Pratap Singh</h2>
-          <p className="text-xs sm:text-sm text-neutral-400">@rudra00codes</p>
+          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">@rudra00codes</p>
         </div>
 
         {/* Yin Yang icon (click to spin + ink pull) */}
@@ -219,7 +219,7 @@ const ProfileCard = () => {
           onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && triggerSpinAndInk()}
           onAnimationEnd={onSpinEnd}
           aria-label="Toggle theme"
-          className={`relative inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/5 ring-1 ring-white/10 hover:bg-white/10 cursor-pointer select-none transition-colors ${spinning ? 'animate-[spin_650ms_ease-in-out]' : ''
+          className={`group/yinyang relative inline-flex items-center justify-center w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer select-none transition-colors yin-yang-glow ${spinning ? 'animate-[spin_650ms_ease-in-out]' : ''
             }`}
         >
           <svg
@@ -234,31 +234,36 @@ const ProfileCard = () => {
             <circle cx="31" cy="19" r="4" fill="#000" />
             <circle cx="33" cy="45" r="4" fill="#fff" />
           </svg>
+
+          {/* Glassmorphic Tooltip */}
+          <span className="pointer-events-none absolute right-full mr-2.5 top-1/2 -translate-y-1/2 scale-95 opacity-0 group-hover/yinyang:scale-100 group-hover/yinyang:opacity-100 transition-all duration-200 ease-out origin-right whitespace-nowrap px-2.5 py-1 text-[10px] font-medium tracking-wide text-neutral-800 dark:text-neutral-200 bg-white/80 dark:bg-black/60 border border-black/5 dark:border-white/10 backdrop-blur-md rounded-md shadow-lg">
+            Toggle Theme
+          </span>
         </span>
       </div>
 
       {/* Bio / Content */}
       <div className="mt-8 mb-6">
-        <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-3">
+        <p className="text-2xl sm:text-3xl font-bold text-black dark:text-white tracking-tight mb-3">
           I build{' '}
-          <span className="inline-block text-neutral-400">
+          <span className="inline-block text-neutral-500 dark:text-neutral-400">
             <MorphingText inline texts={['WebApps', 'Frontends', 'Experiences']} />
           </span>
         </p>
-        <p className="text-base sm:text-lg text-neutral-400 leading-relaxed max-w-lg">
-          Hello, I'm <span className="text-white font-semibold">Rudra</span>! A 20 year old developer based in Punjab - India.
+        <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed max-w-lg">
+          Hello, I'm <span className="text-black dark:text-white font-semibold">Rudra</span>! A 20 year old developer based in Punjab - India.
         </p>
       </div>
 
       {/* Footer */}
       <div className="flex items-end justify-between text-xs sm:text-sm text-neutral-500 font-medium pt-2">
         <p className="leading-relaxed opacity-60">"Still centering a div!"<br /> (┬┬﹏┬┬) </p>
-        <div className="flex items-center gap-2.5 bg-white/5 px-3 py-1.5 rounded-full border border-white/5">
+        <div className="flex items-center gap-2.5 bg-black/5 dark:bg-white/5 px-3 py-1.5 rounded-full border border-black/5 dark:border-white/5">
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
           </span>
-          <span className="text-neutral-300">Available for work</span>
+          <span className="text-neutral-700 dark:text-neutral-300">Available for work</span>
         </div>
       </div>
     </Panel>

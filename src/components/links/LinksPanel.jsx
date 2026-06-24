@@ -19,14 +19,20 @@ const RING_INSET = 'inset-1'; // space between outer edge and inner ring/content
 
 function BrandPicture({ dark, light, alt, className = '' }) {
   return (
-    <picture className="pointer-events-none select-none transition-transform duration-300 ease-out group-hover:scale-[1.08]">
-      {light && <source srcSet={light} media="(prefers-color-scheme: light)" />}
+    <div className="pointer-events-none select-none transition-transform duration-300 ease-out group-hover/tile:scale-[1.08] w-full h-full flex items-center justify-center">
+      {light && (
+        <img
+          src={light}
+          alt={alt}
+          className={`w-full h-full object-contain block dark:hidden drop-shadow-[0_0_0_rgba(0,0,0,0)] transition-[filter,transform] duration-300 ease-out group-hover/tile:drop-shadow-[0_0_8px_rgba(0,0,0,0.12)] ${className}`}
+        />
+      )}
       <img
         src={dark || light}
         alt={alt}
-        className={`w-full h-full object-contain block drop-shadow-[0_0_0_rgba(255,255,255,0)] transition-[filter,transform] duration-300 ease-out group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.55)] ${className}`}
+        className={`w-full h-full object-contain ${light ? 'hidden dark:block' : 'block'} drop-shadow-[0_0_0_rgba(255,255,255,0)] transition-[filter,transform] duration-300 ease-out group-hover/tile:drop-shadow-[0_0_8px_rgba(255,255,255,0.55)] ${className}`}
       />
-    </picture>
+    </div>
   );
 }
 
@@ -40,21 +46,21 @@ function Tile({ children, href, ariaLabel, tooltip, unstyled = false, className 
   }
 
   return (
-    <Panel className={`group relative p-0 ${TILE_SIZE} overflow-hidden flex items-center justify-center ${OUTER_RADIUS} bg-white/5 border border-white/10 transition-colors hover:bg-white/8 hover:border-white/20 ${className}`}>
+    <Panel className={`group/tile relative p-0 ${TILE_SIZE} overflow-hidden flex items-center justify-center ${OUTER_RADIUS} bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 transition-colors hover:bg-black/8 dark:hover:bg-white/8 hover:border-black/20 dark:hover:border-white/20 ${className}`}>
       {/* inner ring */}
-      <span className={`pointer-events-none absolute ${RING_INSET} ${INNER_RADIUS} ring-1 ring-white/10`} />
+      <span className={`pointer-events-none absolute ${RING_INSET} ${INNER_RADIUS} ring-1 ring-black/5 dark:ring-white/10`} />
       {/* content box matches ring inset so the icon can fill it */}
-      <div className={`absolute ${RING_INSET} ${INNER_RADIUS} overflow-hidden flex items-center justify-center transition-shadow duration-300 group-hover:shadow-[0_0_18px_-2px_rgba(255,255,255,0.45)]`}>
+      <div className={`absolute ${RING_INSET} ${INNER_RADIUS} overflow-hidden flex items-center justify-center transition-shadow duration-300 group-hover/tile:shadow-[0_0_18px_-2px_rgba(0,0,0,0.12)] dark:group-hover/tile:shadow-[0_0_18px_-2px_rgba(255,255,255,0.45)]`}>
         {children}
       </div>
-      {tooltip && <Tooltip label={tooltip} position="top" />}
+      {tooltip && <Tooltip label={tooltip} position="top" groupName="tile" />}
       {href ? (
         <a
           href={href}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={ariaLabel}
-          className={`absolute inset-0 ${OUTER_RADIUS} focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 active:scale-[0.985] transition-transform`}
+          className={`absolute inset-0 ${OUTER_RADIUS} focus:outline-none focus-visible:ring-2 focus-visible:ring-black/25 dark:focus-visible:ring-white/25 active:scale-[0.985] transition-transform`}
         />
       ) : null}
     </Panel>
@@ -65,7 +71,7 @@ function TitleTile() {
   return (
     // Give the title the same footprint as a tile so columns line up
     <Tile unstyled className={`${TILE_SIZE} shrink-0`}>
-      <h2 className="text-3xl sm:text-4xl font-extrabold leading-[0.9] tracking-tight text-white select-none pointer-events-none text-left">
+      <h2 className="text-3xl sm:text-4xl font-extrabold leading-[0.9] tracking-tight text-black dark:text-white select-none pointer-events-none text-left">
         <span className="block">LIN</span>
         <span className="block">KS.</span>
       </h2>

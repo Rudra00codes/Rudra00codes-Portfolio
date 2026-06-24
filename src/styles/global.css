@@ -127,9 +127,11 @@ body { font-family: 'Space Grotesk', system-ui, Arial, sans-serif; }
 	--panel-bg: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.92));
 	--panel-border: rgba(0,0,0,0.06);
 	--panel-inner-border: rgba(0,0,0,0.06);
+	--panel-inner-border-double: rgba(0,0,0,0.05);
 	--panel-inset: rgba(0,0,0,0.03);
 	--panel-shadow: 0 12px 34px rgba(17,24,39,0.06);
 	--panel-ring-outer: rgba(0,0,0,0.06);
+	--app-radial-dots: radial-gradient(circle, rgba(0, 0, 0, 0.08) 0.9px, transparent 0.9px);
 }
 
 .dark {
@@ -137,9 +139,11 @@ body { font-family: 'Space Grotesk', system-ui, Arial, sans-serif; }
 	--panel-bg: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
 	--panel-border: rgba(255,255,255,0.06);
 	--panel-inner-border: rgba(255,255,255,0.06);
+	--panel-inner-border-double: rgba(255,255,255,0.08);
 	--panel-inset: rgba(255,255,255,0.02);
 	--panel-shadow: 0 8px 22px rgba(0,0,0,0.6);
 	--panel-ring-outer: rgba(255,255,255,0.035);
+	--app-radial-dots: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0.9px, transparent 0.9px);
 }
 
 /* Override Tailwind bg classes on panel-base with a glass style that adapts to .dark */
@@ -259,4 +263,43 @@ html:not(.dark) body {
 
 /* Utility: simplify overlay removal fade-out */
 .theme-overlay--fading { opacity: 0 !important; }
+
+/* Pulsating glow effect for Yin-Yang theme toggle button */
+@keyframes yin-yang-pulse {
+  0%, 100% {
+    box-shadow: 0 0 6px var(--yinyang-glow-color-start, rgba(0, 0, 0, 0.08));
+    border-color: var(--yinyang-border-color-start, rgba(0, 0, 0, 0.1)) !important;
+  }
+  50% {
+    box-shadow: 0 0 16px var(--yinyang-glow-color-mid, rgba(0, 0, 0, 0.25));
+    border-color: var(--yinyang-border-color-mid, rgba(0, 0, 0, 0.35)) !important;
+  }
+}
+
+:root {
+  --yinyang-glow-color-start: rgba(0, 0, 0, 0.06);
+  --yinyang-glow-color-mid: rgba(0, 0, 0, 0.18);
+  --yinyang-border-color-start: rgba(0, 0, 0, 0.1);
+  --yinyang-border-color-mid: rgba(0, 0, 0, 0.25);
+}
+
+.dark {
+  --yinyang-glow-color-start: rgba(255, 255, 255, 0.08);
+  --yinyang-glow-color-mid: rgba(255, 255, 255, 0.35);
+  --yinyang-border-color-start: rgba(255, 255, 255, 0.1);
+  --yinyang-border-color-mid: rgba(255, 255, 255, 0.3);
+}
+
+.yin-yang-glow {
+  border: 1px solid var(--yinyang-border-color-start);
+  animation: yin-yang-pulse 2.5s infinite ease-in-out;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Override tailwind default ring shadow when glow is active to avoid clashes */
+.yin-yang-glow.yin-yang-glow {
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+}
+
 

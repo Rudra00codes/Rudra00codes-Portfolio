@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Panel from '../layout/Panel.jsx';
 import avatar from '@/assets/images/picofme.png';
 import MorphingText from '@/components/ui/morphingtext';
@@ -11,10 +12,13 @@ const GIF_DURATION_MS = 2400; // duration to show GIF overlay (ms) — adjust to
 const ProfileCard = () => {
   const [spinning, setSpinning] = useState(false);
   const [ink, setInk] = useState({ active: false, left: 0, top: 0, start: 16 });
+  const [transitionActive, setTransitionActive] = useState(false);
+  const [backdropVisible, setBackdropVisible] = useState(false);
+  const [overlayClass, setOverlayClass] = useState('');
+  const [overlayOpacity, setOverlayOpacity] = useState(1);
   const btnRef = useRef(null);
-  // preload GIF fallback asset and keep a ref to overlay element
+  // preload GIF fallback asset
   const gifSrc = rickGif;
-  const overlayRef = useRef(null);
 
   useEffect(() => {
     // Preload GIF to avoid jank on first use
@@ -53,7 +57,7 @@ const ProfileCard = () => {
       const startScale = Math.ceil(maxDist * 2);
       setInk({ active: true, left: cx, top: cy, start: startScale });
 
-      // Theme toggle using GIF overlay only (no View Transitions / immediate toggle)
+      // Theme toggle using React Portal + GIF overlay (no synchronous canvas snapshot)
       const doGifToggle = () => {
         // Respect reduced-motion preference: skip GIF and toggle immediately
         if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -64,113 +68,39 @@ const ProfileCard = () => {
           } catch (e) { }
           return;
         }
-        // Create overlay element if missing
-        let overlay = overlayRef.current;
-        if (!overlay) {
-          overlay = document.createElement('img');
-          overlayRef.current = overlay;
-          overlay.id = 'theme-gif-overlay';
-          // smaller centered overlay so GIF appears as a contained vignette
-          overlay.style.position = 'fixed';
-          overlay.style.left = '50%';
-          overlay.style.top = '50%';
-          overlay.style.transform = 'translate(-50%, -50%)';
-          overlay.style.width = 'min(48vmin, 720px)';
-          overlay.style.height = 'auto';
-          overlay.style.objectFit = 'contain';
-          overlay.style.zIndex = '9999';
-          overlay.style.pointerEvents = 'none';
-          overlay.style.borderRadius = '12px';
-          overlay.style.transition = 'opacity 360ms ease';
-        }
 
-        overlay.src = gifSrc;
-        // Make GIF appear black/white depending on current theme
         const currentlyDark = document.documentElement.classList.contains('dark');
-        if (currentlyDark) {
-          // page is dark: show GIF as white-on-dark
-          overlay.classList.remove('theme-overlay--light');
-          overlay.classList.add('theme-overlay--dark');
-        } else {
-          // page is light: show GIF as dark-on-light
-          overlay.classList.remove('theme-overlay--dark');
-          overlay.classList.add('theme-overlay--light');
-        }
+        setOverlayClass(currentlyDark ? 'theme-overlay--dark' : 'theme-overlay--light');
+        setOverlayOpacity(1);
+        setTransitionActive(true);
+        setBackdropVisible(false);
 
-        // fade control
-        overlay.classList.add('theme-overlay');
-        document.body.appendChild(overlay);
-
-        // Flip theme near midpoint of GIF so the animation masks the change.
-        // To avoid an abrupt halt we add a short blur/backdrop, snapshot the frame,
-        // swap to the frozen PNG and then ease the blur out for a smooth transition.
+        // Timeline:
+        // 1. Show GIF overlay (transitionActive = true)
+        // 2. Start blur backdrop fade-in mid-way (so it's fully blurred when we swap theme)
         const freezeTime = Math.round(GIF_DURATION_MS * 0.5);
+        
         setTimeout(() => {
-          try {
-            // create or reuse a subtle full-screen backdrop that applies a backdrop-filter blur
-            let backdrop = document.getElementById('theme-blur-backdrop');
-            if (!backdrop) {
-              backdrop = document.createElement('div');
-              backdrop.id = 'theme-blur-backdrop';
-              backdrop.style.position = 'fixed';
-              backdrop.style.inset = '0';
-              backdrop.style.pointerEvents = 'none';
-              backdrop.style.zIndex = '9998';
-              backdrop.className = 'theme-backdrop';
-            }
-            document.body.appendChild(backdrop);
-
-            // start freeze visual: blur the GIF and show backdrop before snapshot
-            overlay.classList.add('theme-overlay--freeze');
-            // ensure the backdrop transition has a frame to start from
-            requestAnimationFrame(() => {
-              try { backdrop.style.opacity = '1'; } catch (e) { }
-            });
-
-            // small delay so blur/backdrop ramps up and looks smooth
-            setTimeout(() => {
-              try {
-                // snapshot current frame into a canvas (may fail on some browsers)
-                const w = overlay.naturalWidth || overlay.width || 800;
-                const h = overlay.naturalHeight || overlay.height || 450;
-                try {
-                  const c = document.createElement('canvas');
-                  c.width = w;
-                  c.height = h;
-                  const ctx = c.getContext('2d');
-                  ctx.drawImage(overlay, 0, 0, w, h);
-                  const png = c.toDataURL('image/png');
-                  // replace src with frozen PNG frame
-                  overlay.src = png;
-                  overlay.dataset.frozen = '1';
-                } catch (snapErr) {
-                  // snapshot failed — fallback to leaving GIF playing
-                }
-
-                // mark frozen and ease blur out for smoothness
-                overlay.classList.remove('theme-overlay--freeze');
-                overlay.classList.add('theme-overlay--frozen');
-
-                const nextIsDark = !document.documentElement.classList.contains('dark');
-                document.documentElement.classList.toggle('dark', nextIsDark);
-                try { localStorage.setItem('theme', nextIsDark ? 'dark' : 'light'); } catch (e) { }
-
-                // fade backdrop away after short delay
-                setTimeout(() => {
-                  try { backdrop.style.opacity = '0'; } catch (e) { }
-                  setTimeout(() => { try { backdrop.remove(); } catch (e) { } }, 360);
-                }, 360);
-              } catch (err) { }
-            }, 120);
-          } catch (e) { }
-        }, freezeTime);
-
-        // Fade out then remove after GIF_DURATION_MS
-        setTimeout(() => {
-          try { overlay.style.opacity = '0'; } catch (e) { }
+          setBackdropVisible(true);
+          // Wait for backdrop to fade in, then swap theme
           setTimeout(() => {
-            try { overlay.remove(); overlayRef.current = null; } catch (e) { }
-          }, 360);
+            const nextIsDark = !document.documentElement.classList.contains('dark');
+            document.documentElement.classList.toggle('dark', nextIsDark);
+            try { localStorage.setItem('theme', nextIsDark ? 'dark' : 'light'); } catch (e) { }
+
+            // Immediately start fading out backdrop after theme swap
+            setTimeout(() => {
+              setBackdropVisible(false);
+            }, 50);
+          }, 200); // 200ms is enough for the backdrop transition
+        }, freezeTime - 100);
+
+        // Fade out then unmount
+        setTimeout(() => {
+          setOverlayOpacity(0);
+          setTimeout(() => {
+            setTransitionActive(false);
+          }, 360); // match fade transition
         }, GIF_DURATION_MS);
       };
 
@@ -266,6 +196,26 @@ const ProfileCard = () => {
           <span className="text-neutral-700 dark:text-neutral-300">Available for work</span>
         </div>
       </div>
+
+      {transitionActive &&
+        createPortal(
+          <>
+            <div
+              className={`theme-backdrop ${backdropVisible ? 'theme-backdrop--visible' : ''}`}
+            />
+            <img
+              src={gifSrc}
+              className={`theme-overlay ${overlayClass}`}
+              style={{
+                opacity: overlayOpacity,
+                transition: 'opacity 360ms ease',
+                borderRadius: '12px'
+              }}
+              alt=""
+            />
+          </>,
+          document.body
+        )}
     </Panel>
   );
 };
